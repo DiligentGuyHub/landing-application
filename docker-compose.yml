@@ -1,30 +1,53 @@
-# Version of Docker-compose
 version: '3.9'
 services:
-  # Add the node-js service
-  node:
-    # Location to the node.js dockerfile
+  server:
     build:
       context: ./server
-      # Name of the dockerfile
       dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    environment:
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
     container_name: node-container
     ports:
-      # Host port:Container port
       - '4000:4000'
     volumes:
-      # Bind-mounts configuration
-      - ./node:/app
-      # Ignoring any changes made in "node_modules" folder
-      - ./app/node_modules
-  react:
-    # Location to the React.js dockerfile
+      - './server:/app'
+      - '/app/node_modules'
+  client:
+    container_name: react-container
     build:
       context: ./client
-      # Name of the dockerfile
       dockerfile: Dockerfile
-    container_name: react-container
+    environment:
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - './client:/app'
+      - '/app/node_modules'
     ports:
-      # Host port:Container port
       - '3000:3000'
     stdin_open: true
+    tty: true
+    command: npm start
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - landing-network
+networks:
+  landing-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+    driver: local
