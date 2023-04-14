@@ -2,7 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {VideoBackground} from './components/VideoBackground'
+import {VideoBackground} from './components/VideoBackground';
+import {QuestionForm} from './components/QuestionForm';
 
 function App() {
     // const [questions, setQuestions] = useState([])
@@ -24,9 +25,14 @@ function App() {
     // }
 
     return (
-        <div className="container">
-            <VideoBackground/>
-        </div>);
+        <main>
+            <div className="container">
+                {/*<VideoBackground/>*/}
+                <QuestionForm/>
+            </div>
+        </main>
+
+    );
 }
 
 export default App;
