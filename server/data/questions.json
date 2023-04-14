@@ -1,0 +1,298 @@
+[
+  {
+    "orderId": 1,
+    "text": "Какой вкус конфет и шоколада Вы предпочитаете?",
+    "category": "multiple",
+    "field": "none",
+    "answers": [
+      {
+        "text": "сладкий",
+        "value": "0"
+      },
+      {
+        "text": "соленый",
+        "value": "1"
+      },
+      {
+        "text": "кислый",
+        "value": "2"
+      },
+      {
+        "text": "горький",
+        "value": "3"
+      },
+      {
+        "text": "молочный",
+        "value": "4"
+      }
+    ]
+  },
+  {
+    "orderId": 2,
+    "text": "Как Вы относитесь к сахару?",
+    "category": "single",
+    "field": "none",
+    "answers": [
+      {
+        "text": "Люблю без сахара",
+        "value": "0"
+      },
+      {
+        "text": "Предпочитаю с сахаром",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "orderId": 3,
+    "text": "Конфеты какой текстуры кажутся Вам наиболее предпочтительными?",
+    "category": "multiple",
+    "field": "none",
+    "answers": [
+      {
+        "text": "хрустящие",
+        "value": "0"
+      },
+      {
+        "text": "твердые",
+        "value": "1"
+      },
+      {
+        "text": "мягкие",
+        "value": "2"
+      }
+    ]
+  },
+  {
+    "orderId": 4,
+    "text": "Какую начинку Вы бы выбрали?",
+    "category": "multiple",
+    "field": "none",
+    "answers": [
+      {
+        "text": "ореховая",
+        "value": "0"
+      },
+      {
+        "text": "трюфельная",
+        "value": "1"
+      },
+      {
+        "text": "молочно-шоколадная",
+        "value": "2"
+      },
+      {
+        "text": "фруктовая",
+        "value": "3"
+      },
+      {
+        "text": "ягодная",
+        "value": "4"
+      },
+      {
+        "text": "алкогольная",
+        "value": "5"
+      },
+      {
+        "text": "с сухофруктами",
+        "value": "6"
+      },
+      {
+        "text": "ирисовая",
+        "value": "7"
+      },
+      {
+        "text": "свой вариант",
+        "value": "8"
+      }
+    ]
+  },
+  {
+    "orderId": 5,
+    "text": "Какой формат упаковки наиболее удобен для вас?",
+    "category": "multiple",
+    "field": "none",
+    "answers": [
+      {
+        "text": "отдельная порция",
+        "value": "0"
+      },
+      {
+        "text": "для всей семьи",
+        "value": "1"
+      },
+      {
+        "text": "с возможность повторного закрытия",
+        "value": "2"
+      }
+    ]
+  },
+  {
+    "orderId": 6,
+    "text": "Укажите пожалуйста свой пол",
+    "category": "single",
+    "field": "gender",
+    "answers": [
+      {
+        "text": "женщина",
+        "value": "0"
+      },
+      {
+        "text": "мужчина",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "orderId": 7,
+    "text": "Укажите пожалуйста свой возраст",
+    "category": "range",
+    "field": "none",
+    "answers": [
+      {
+        "text": "6-15",
+        "value": "0"
+      },
+      {
+        "text": "15-24",
+        "value": "1"
+      },
+      {
+        "text": "25-44",
+        "value": "2"
+      },
+      {
+        "text": "45-64",
+        "value": "3"
+      },
+      {
+        "text": "65 и старше",
+        "value": "4"
+      }
+    ]
+  },
+  {
+    "orderId": 8,
+    "text": "Подскажите, какое у Вас семейное положение?",
+    "category": "single",
+    "field": "none",
+    "answers": [
+      {
+        "text": "замужем/женат",
+        "value": "0"
+      },
+      {
+        "text": "холост/холоста",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "orderId": 9,
+    "text": "Есть ли у Вас дети?",
+    "category": "single",
+    "field": "children",
+    "answers": [
+      {
+        "text": "нет",
+        "value": "0"
+      },
+      {
+        "text": "да",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "orderId": 10,
+    "text": "Работаете ли Вы?",
+    "category": "single",
+    "field": "employment",
+    "answers": [
+      {
+        "text": "нет",
+        "value": "0"
+      },
+      {
+        "text": "да",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "orderId": 11,
+    "text": "Удовлетворены ли Вы своей работой?",
+    "category": "single",
+    "field": "none",
+    "answers": [
+      {
+        "text": "нет",
+        "value": "0"
+      },
+      {
+        "text": "да",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "orderId": 12,
+    "text": "Как часто вы употребляете сладкое?",
+    "category": "single",
+    "field": "frequency",
+    "answers": [
+      {
+        "text": "вообще не ем",
+        "value": "0"
+      },
+      {
+        "text": "редко, но ем",
+        "value": "1"
+      },
+      {
+        "text": "не слишком часто",
+        "value": "2"
+      },
+      {
+        "text": "достаточно часто",
+        "value": "3"
+      },
+      {
+        "text": "очень часто",
+        "value": "4"
+      }
+    ]
+  },
+  {
+    "orderId": 13,
+    "text": "Помогает ли Вам сладкое справиться с плохим настроением?",
+    "category": "single",
+    "field": "none",
+    "answers": [
+      {
+        "text": "нет",
+        "value": "0"
+      },
+      {
+        "text": "да",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "orderId": 14,
+    "text": "Являются ли спорт и правильное питание частью вашей жизни?",
+    "category": "single",
+    "field": "none",
+    "answers": [
+      {
+        "text": "нет",
+        "value": "0"
+      },
+      {
+        "text": "да",
+        "value": "1"
+      }
+    ]
+  }
+]

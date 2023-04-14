@@ -1,25 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import {VideoBackground} from './components/VideoBackground'
 
 function App() {
-  const [reviews, setReviews] = useState([])
-  useEffect(() => {
-    fetch('http://localhost:4000/')
-        .then(res => res.json())
-        .then(data => setReviews(data))
-  }, [])
-  return (
-      <div className="App">
-        <header className="App-header">
-          <h1>All Reviews</h1>
-          {reviews && reviews.map(blog => (
-              <div key={blog.id}>{blog.title}</div>
-          ))}
-        </header>
-      </div>
-  );
+    // const [questions, setQuestions] = useState([])
+    // useEffect(() => {
+    //     fetch('http://localhost:4000/')
+    //         .then(res => res.json())
+    //         .then(data => setQuestions(data))
+    // }, []);
+
+
+    // const handleScroll = () => {
+    //     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    //     const threshold = 50;
+    //     if (scrollTop > threshold) {
+    //         headerRef.current.classList.add('scrolled');
+    //     } else {
+    //         headerRef.current.classList.remove('scrolled');
+    //     }
+    // }
+
+    return (
+        <div className="container">
+            <VideoBackground/>
+        </div>);
 }
 
 export default App;
