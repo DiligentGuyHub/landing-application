@@ -7,9 +7,9 @@ const answerSchema = new Schema({
 });
 
 const questionSchema = new Schema({
-    orderId: {type: Number, required: true},
+    orderId: {type: Number, unique: true},
     text: {type: String, required: true},
-    category: {type: String, enum: ['single', 'multiple', 'text', 'range'], required: true},
+    type: {type: String, enum: ['radio', 'checkbox', 'text', 'range'], required: true},
     field: {type: String, enum: ['firstname', 'lastname', 'email', 'age', 'frequency', 'gender', 'children', 'employment', 'none'], default: 'none'},
     answers: [answerSchema]
 });

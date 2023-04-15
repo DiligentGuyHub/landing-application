@@ -2,7 +2,7 @@
   {
     "orderId": 1,
     "text": "Какой вкус конфет и шоколада Вы предпочитаете?",
-    "category": "multiple",
+    "type": "checkbox",
     "field": "none",
     "answers": [
       {
@@ -30,7 +30,7 @@
   {
     "orderId": 2,
     "text": "Как Вы относитесь к сахару?",
-    "category": "single",
+    "type": "radio",
     "field": "none",
     "answers": [
       {
@@ -46,7 +46,7 @@
   {
     "orderId": 3,
     "text": "Конфеты какой текстуры кажутся Вам наиболее предпочтительными?",
-    "category": "multiple",
+    "type": "checkbox",
     "field": "none",
     "answers": [
       {
@@ -66,7 +66,7 @@
   {
     "orderId": 4,
     "text": "Какую начинку Вы бы выбрали?",
-    "category": "multiple",
+    "type": "checkbox",
     "field": "none",
     "answers": [
       {
@@ -110,7 +110,7 @@
   {
     "orderId": 5,
     "text": "Какой формат упаковки наиболее удобен для вас?",
-    "category": "multiple",
+    "type": "checkbox",
     "field": "none",
     "answers": [
       {
@@ -130,7 +130,7 @@
   {
     "orderId": 6,
     "text": "Укажите пожалуйста свой пол",
-    "category": "single",
+    "type": "radio",
     "field": "gender",
     "answers": [
       {
@@ -146,35 +146,23 @@
   {
     "orderId": 7,
     "text": "Укажите пожалуйста свой возраст",
-    "category": "range",
+    "type": "range",
     "field": "none",
     "answers": [
       {
-        "text": "6-15",
+        "text": "6",
         "value": "0"
       },
       {
-        "text": "15-24",
-        "value": "1"
-      },
-      {
-        "text": "25-44",
-        "value": "2"
-      },
-      {
-        "text": "45-64",
-        "value": "3"
-      },
-      {
-        "text": "65 и старше",
-        "value": "4"
+        "text": "65",
+        "value": "0"
       }
     ]
   },
   {
     "orderId": 8,
     "text": "Подскажите, какое у Вас семейное положение?",
-    "category": "single",
+    "type": "radio",
     "field": "none",
     "answers": [
       {
@@ -190,7 +178,7 @@
   {
     "orderId": 9,
     "text": "Есть ли у Вас дети?",
-    "category": "single",
+    "type": "radio",
     "field": "children",
     "answers": [
       {
@@ -206,7 +194,7 @@
   {
     "orderId": 10,
     "text": "Работаете ли Вы?",
-    "category": "single",
+    "type": "radio",
     "field": "employment",
     "answers": [
       {
@@ -222,7 +210,7 @@
   {
     "orderId": 11,
     "text": "Удовлетворены ли Вы своей работой?",
-    "category": "single",
+    "type": "radio",
     "field": "none",
     "answers": [
       {
@@ -238,7 +226,7 @@
   {
     "orderId": 12,
     "text": "Как часто вы употребляете сладкое?",
-    "category": "single",
+    "type": "radio",
     "field": "frequency",
     "answers": [
       {
@@ -266,7 +254,7 @@
   {
     "orderId": 13,
     "text": "Помогает ли Вам сладкое справиться с плохим настроением?",
-    "category": "single",
+    "type": "radio",
     "field": "none",
     "answers": [
       {
@@ -282,7 +270,7 @@
   {
     "orderId": 14,
     "text": "Являются ли спорт и правильное питание частью вашей жизни?",
-    "category": "single",
+    "type": "radio",
     "field": "none",
     "answers": [
       {

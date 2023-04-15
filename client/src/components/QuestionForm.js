@@ -1,23 +1,28 @@
 import React, {useState, useEffect} from "react";
+import '../styles/QuestionForm.css';
 import {AnswerElement} from "./AnswerElement";
+import {RangeElement} from "./RangeElement";
 import axios from "axios";
 
-export const QuestionForm = () => {
+export const QuestionForm = ({isScrolled}) => {
     const [question, setQuestion] = useState({
         "orderId": null,
         "text": "",
-        "category": "",
+        "type": "",
         "field": "",
         "answers": []
     });
     const [selectedAnswers, setSelectedAnswers] = useState([]);
-    const [counter, setCounter] = useState(1);
+    const [counter, setCounter] = useState(7);
+
+    useEffect(() => {
+        console.log(selectedAnswers);
+    }, [selectedAnswers]);
 
     useEffect(() => {
         axios.get(`http://localhost:4000/questions/${counter}`)
             .then(response => {
                 setQuestion(response.data.question);
-                console.log(response.data.question);
             })
             .catch(error => {
                 console.log(error);
@@ -32,51 +37,51 @@ export const QuestionForm = () => {
         });
     };
 
+    const handleRangeChange = (selectedValue) => {
+        setSelectedAnswers([selectedValue]);
+    };
+
     const handleContinueClick = (event) => {
         event.preventDefault();
         setCounter(prev => prev + 1);
+        setSelectedAnswers([]);
     };
 
-    const isContinueButtonDisabled = selectedAnswers.length !== 0;
+    const isContinueButtonEnabled = selectedAnswers.length !== 0;
 
-    const renderAnswerInputs = (category) => {
-        switch (category) {
-            case 'single':
-                // return question.answers.map((answer) => (
-                //     <div key={answer.value}>
-                //         <input
-                //             type='radio'
-                //             name='option'
-                //             id={answer.value}
-                //             value={answer.text}
-                //             checked={selectedAnswers.includes(answer)}
-                //             onChange={(e) => handleOptionChange(answer)}/>
-                //         <label htmlFor={answer.value}>{answer.text}</label>
-                //     </div>
-                // ));
-            case 'multiple':
+    const renderAnswerInputs = (question) => {
+        switch (question.type) {
+            case 'radio':
+            case 'checkbox':
                 return question.answers.map((answer) => (
                     <AnswerElement
                         key={answer._id}
                         answer={answer}
-                        type='checkbox'
+                        type={question.type}
                         handleAnswerSelect={handleAnswerSelect}/>
                 ));
-            case 'text':
-                return <input type="text" name={question.id}/>;
             case 'range':
+                return (
+                    <RangeElement
+                        key={question._id}
+                        min={parseInt(question.answers[0].text)}
+                        max={parseInt(question.answers[1].text)}
+                        onChange={handleRangeChange}/>);
         }
+
     }
 
     return (
-        <form onSubmit={handleContinueClick}>
-            <h2>{question.text}</h2>
-            {renderAnswerInputs(question.category)}
-            {isContinueButtonDisabled && (
-                <div className="continue-button-wrapper">
-                    <button className="continue-button" onSubmit={handleContinueClick}>продолжить</button>
-                </div>
-            )}
-        </form>
+        <div className={`question-form-wrapper ${isScrolled ? 'show' : ''}`}>
+            <form onSubmit={handleContinueClick}>
+                <h2>{question.text}</h2>
+                {renderAnswerInputs(question)}
+                {isContinueButtonEnabled && (
+                    <div className="continue-button-wrapper">
+                        <button className="continue-button" onSubmit={handleContinueClick}>продолжить</button>
+                    </div>
+                )}
+            </form>
+        </div>
     );
 }

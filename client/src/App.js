@@ -1,34 +1,37 @@
 import logo from './logo.svg';
-import './App.css';
-import React, {useState, useEffect} from 'react';
+import './styles/App.css';
+import React, {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 import {VideoBackground} from './components/VideoBackground';
 import {QuestionForm} from './components/QuestionForm';
+import {BrandHeader} from "./components/BrandHeader";
 
 function App() {
-    // const [questions, setQuestions] = useState([])
-    // useEffect(() => {
-    //     fetch('http://localhost:4000/')
-    //         .then(res => res.json())
-    //         .then(data => setQuestions(data))
-    // }, []);
+    const [isScrolled, setIsScrolled] = useState(false);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTop = window.pageYOffset;
+            if (scrollTop > 0 && !isScrolled) {
+                setIsScrolled(true);
+            } else if (scrollTop === 0 && isScrolled) {
+                setIsScrolled(false);
+            }
+        };
 
-    // const handleScroll = () => {
-    //     const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    //     const threshold = 50;
-    //     if (scrollTop > threshold) {
-    //         headerRef.current.classList.add('scrolled');
-    //     } else {
-    //         headerRef.current.classList.remove('scrolled');
-    //     }
-    // }
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [isScrolled]);
 
     return (
         <main>
-            <div className="container">
-                {/*<VideoBackground/>*/}
-                <QuestionForm/>
+            <div style={{position: 'relative'}}>
+                <BrandHeader isScrolled={isScrolled}/>
+                <VideoBackground isVisible={!isScrolled}/>
+                <QuestionForm isScrolled={isScrolled} />
             </div>
         </main>
 
