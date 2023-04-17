@@ -1,73 +1,67 @@
-input[type="checkbox"], input[type="radio"] {
-    appearance: none;
-}
-
-.answer-wrapper {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-    width: 600px;
-}
-
-.answer-input {
-    margin-right: 10px;
-}
-
-.answer-label.radio.checkbox {
-    flex: 1;
-    padding: 10px;
-    background-color: #3d1e13;
-    border: 3px solid #3d1e13;
-    border-radius: 15px;
-    font-family: 'Montserrat', sans-serif;
-    cursor: pointer;
-}
-
-.answer-input:checked + .answer-label {
-    background-color: #3d1e13;
-    color: white;
-}
-
-.answer-input:not(:checked) + .answer-label {
-    background-color: white;
-    border: 3px solid #3d1e13;
-}
-
-.continue-button-wrapper {
-    display: flex;
-    width: 600px;
-    flex-direction: row-reverse;
-    justify-content: center;
-    align-items: center;
-}
-
-.continue-button {
-    text-align: left;
-    background-color: #ad895f;
-    font-family: 'Montserrat', sans-serif;
-    color: white;
-    border-radius: 15px;
-    border: 3px solid #3d1e13;
-    padding: 10px;
-    font-size: 16px;
-    width: 600px;
-    flex: 1;
-    margin-left: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-.continue-button:hover {
-    background-color: #3d1e13;
-}
+/*.question-form-wrapper {*/
+/*    top: 50%;*/
+/*    left: 50%;*/
+/*    border: darkred 4px solid;*/
+/*    border-radius: 20px;*/
+/*    width: 750px;*/
+/*}*/
+/*.question-form-wrapper {*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*}*/
 
 .question-form-wrapper {
+    /*!*position: relative;*!*/
+    /*top: -100vh; !* это значение должно быть равно высоте .video-container, например -100% *!*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*height: 100vh;*/
+    /*z-index: 1;*/
+    /*margin-top: 100px;*/
     position: relative;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: white;
+    top: -100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 50vh;
+    z-index: 1;
+    font-size: calc(10px + 1vmin);
 }
+
+/*@media screen and (min-width: 1200px) {*/
+/*    .question-form-wrapper {*/
+/*        font-size: 1vw;*/
+/*    }*/
+/*}*/
+
+/*!* Для экранов с шириной меньше 600px *!*/
+/*@media screen and (max-width: 600px) {*/
+/*    .question-form-wrapper {*/
+/*        font-size: 0.5vw;*/
+/*    }*/
+/*}*/
+
+.question-form-wrapper.show {
+    animation: slide-down 0.5s forwards;
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/*.question-form-wrapper.show {*/
+/*    transition: transform 0.5s ease-out;*/
+/*    transform: translate(0, -150%);*/
+/*}*/

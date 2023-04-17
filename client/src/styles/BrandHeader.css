@@ -1,0 +1,52 @@
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    background-color: transparent;
+    transition: background-color 0.5s ease;
+    color: white;
+    z-index: 3;
+}
+
+.header {
+    font-family: 'Montserrat', sans-serif;
+    font-size: calc(3vw + 3vh);
+    position: relative;
+}
+
+.header::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: darkred;
+    transition: width 0.5s ease;
+    animation: slideIn 1s ease;
+}
+
+.header-wrapper h1 {
+    position: relative;
+}
+
+.header-wrapper.scrolled {
+    background-color: white;
+    color: #3d1e13;
+}
+/*.header-wrapper.scrolled .header::after {*/
+/*  width: 100%;*/
+/*  animation: slideIn 1s ease;*/
+/*}*/
+
+@keyframes slideIn {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
