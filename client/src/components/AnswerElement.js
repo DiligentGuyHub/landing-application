@@ -1,8 +1,6 @@
-import React, {useState, useEffect, useRef } from 'react';
+import '../styles/AnswerElement.css';
 
 export const AnswerElement = ({ answer, type, handleAnswerSelect }) => {
-    const answerRef = useRef(null);
-
     const handleOnChange = (answer) => (event) => {
         handleAnswerSelect(answer);
     };
@@ -13,10 +11,9 @@ export const AnswerElement = ({ answer, type, handleAnswerSelect }) => {
                 type={type}
                 name='option'
                 className="answer-input"
-                id={answer.value}
-                value={answer.text}
-                onChange={handleOnChange(answer)}/>
-            <label className='answer-label' htmlFor={answer.value}>
+                id={answer._id}
+                value={answer.text}/>
+            <label className='answer-label' htmlFor={answer._id}>
                 {answer.text}
             </label>
         </div>

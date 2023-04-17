@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Question = require("./models/question");
 const app = express();
@@ -11,8 +12,9 @@ mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
     .catch(err => console.error('Error connecting to MongoDB', err));
 
 app.use(cors());
+app.use(bodyParser.json());
 
-app.get('/questions/:orderId', async (req, res) => {
+app.get('/api/questions/:orderId', async (req, res) => {
     const orderId = parseInt(req.params.orderId);
     try {
         const question = await Question.findOne({orderId: orderId});
@@ -26,11 +28,28 @@ app.get('/questions/:orderId', async (req, res) => {
         res.status(500).json({message: err.message});
     }
 })
-app.post('/nextQuestion', (req, res) => {
-    res.json({});
+
+app.post('/api/questions/', async (req, res) => {
+    console.log(req.body);
+    res.send('Data received');
 });
 
+app.get('/api/questions/', async (req, res) => {
+    try {
+        const questions = await Question.find({isActive: true});
+        if (!questions) {
+            return res.status(404).json({message: 'Questions not found'});
+        }
+        res.json({questions});
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({message: err.message});
+    }
+})
+
 app.get('/', (req, res) => {
+    return res.status(200).json({message: 'Server API is available'});
 })
 
 app.listen(4000, () => {
