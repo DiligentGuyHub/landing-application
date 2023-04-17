@@ -2,52 +2,96 @@ import React, {useState, useEffect} from "react";
 import '../styles/QuestionForm.css';
 import {AnswerElement} from "./AnswerElement";
 import {RangeElement} from "./RangeElement";
-import axios from "axios";
+import {TextElement} from "./TextElement";
+import axios from 'axios';
+import {v4 as uuidv4} from 'uuid';
+import Cookies from 'js-cookie';
 
 export const QuestionForm = ({isScrolled}) => {
-    const [question, setQuestion] = useState({
-        "orderId": null,
+    const [questionForm, setQuestionForm] = useState([{
+        "orderId": -1,
         "text": "",
         "type": "",
         "field": "",
         "answers": []
+    }]);
+    const [answers, setAnswers] = useState({
+        "userId": "",
+        "questions": []
     });
-    const [selectedAnswers, setSelectedAnswers] = useState([]);
-    const [counter, setCounter] = useState(7);
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [userId, setUserId] = useState('');
+    const currentQuestion = questionForm[questionIndex];
 
     useEffect(() => {
-        console.log(selectedAnswers);
-    }, [selectedAnswers]);
+        let userIdCookie = Cookies.get('userId');
+        if (!userIdCookie) {
+            userIdCookie = uuidv4();
+            Cookies.set('userId', userIdCookie);
+            console.log(`user id created: ${userIdCookie}`);
+        }
+        setUserId(userIdCookie);
+    }, []);
 
     useEffect(() => {
-        axios.get(`http://localhost:4000/questions/${counter}`)
+        axios.get('http://localhost:4000/api/questions')
             .then(response => {
-                setQuestion(response.data.question);
+                setQuestionForm(response.data.questions);
             })
             .catch(error => {
                 console.log(error);
             });
-    }, [counter]);
+    }, [userId]);
 
-    const handleAnswerSelect = (answer) => {
-        setSelectedAnswers((prevState) => {
-            return (prevState.includes(answer))
-                ? prevState.filter((selectedOption) => selectedOption !== answer)
-                : [...prevState, answer];
-        });
+    useEffect(() => {
+        axios.post('http://localhost:4000/api/questions', answers)
+            .catch(error => {
+                console.log(error);
+            });
+    }, [answers])
+
+    const handleInputChange = (input) => {
+        // setAnswers([input]);
     };
 
-    const handleRangeChange = (selectedValue) => {
-        setSelectedAnswers([selectedValue]);
-    };
-
-    const handleContinueClick = (event) => {
+    const handleContinueClick = async (event) => {
         event.preventDefault();
-        setCounter(prev => prev + 1);
-        setSelectedAnswers([]);
+        const selectedAnswers = Array.from(event.target.querySelectorAll('input[type="checkbox"]:checked'))
+            .map((checkbox) => checkbox.id);
+
+        setAnswers(prevState => {
+            const index = prevState.questions.findIndex(question => question.questionId === currentQuestion._id);
+            if (index !== -1) {
+                const updatedQuestion = {
+                    ...prevState.questions[index],
+                    answers: selectedAnswers
+                };
+                const updatedQuestions = [
+                    ...prevState.questions.slice(0, index),
+                    updatedQuestion,
+                    ...prevState.questions.slice(index + 1)
+                ];
+                return {
+                    ...prevState,
+                    questions: updatedQuestions
+                };
+            }
+
+            return {
+                ...prevState,
+                questions: [
+                    ...prevState.questions,
+                    {
+                        "questionId": currentQuestion._id,
+                        "answers": selectedAnswers
+                    }
+                ]
+            };
+        });
+        setQuestionIndex(prev => prev + 1);
     };
 
-    const isContinueButtonEnabled = selectedAnswers.length !== 0;
+    const isContinueButtonEnabled = currentQuestion.answers.length !== 0;
 
     const renderAnswerInputs = (question) => {
         switch (question.type) {
@@ -57,25 +101,31 @@ export const QuestionForm = ({isScrolled}) => {
                     <AnswerElement
                         key={answer._id}
                         answer={answer}
-                        type={question.type}
-                        handleAnswerSelect={handleAnswerSelect}/>
+                        type={question.type}/>
                 ));
             case 'range':
                 return (
                     <RangeElement
                         key={question._id}
-                        min={parseInt(question.answers[0].text)}
-                        max={parseInt(question.answers[1].text)}
-                        onChange={handleRangeChange}/>);
+                        min={question.min}
+                        max={question.max}
+                        onChange={handleInputChange}/>);
+            case 'text':
+                return (
+                    <TextElement
+                        key={question._id}
+                        regex={question.validator}
+                        onChange={handleInputChange}/>
+                )
         }
 
     }
 
     return (
         <div className={`question-form-wrapper ${isScrolled ? 'show' : ''}`}>
-            <form onSubmit={handleContinueClick}>
-                <h2>{question.text}</h2>
-                {renderAnswerInputs(question)}
+            <form name='questionForm' onSubmit={handleContinueClick}>
+                <h2>{currentQuestion.text}</h2>
+                {renderAnswerInputs(currentQuestion)}
                 {isContinueButtonEnabled && (
                     <div className="continue-button-wrapper">
                         <button className="continue-button" onSubmit={handleContinueClick}>продолжить</button>
