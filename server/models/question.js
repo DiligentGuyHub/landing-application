@@ -12,7 +12,8 @@ const questionSchema = new Schema({
     type: {type: String, enum: ['radio', 'checkbox', 'text', 'range'], required: true},
     field: {type: String, enum: ['name', 'email', 'age', 'frequency', 'gender', 'children', 'employment', 'none'], default: 'none'},
     answers: [answerSchema],
-    validator: {type: String},
+    regex: {type: String},
+    regexMessage: {type: String},
     min: {type: Number},
     max: {type: Number},
     isActive: {type: Boolean, default: true}

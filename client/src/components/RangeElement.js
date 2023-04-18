@@ -1,24 +1,36 @@
-import React, {useState, useEffect, useRef} from "react";
-import '../styles/RangeElement.css'
-export const RangeElement = ({min, max, onChange}) => {
-    const [selectedValue, setSelectedValue] = useState((min + max + 1) / 2);
+import React, {useState, useEffect} from 'react';
+
+export const RangeElement = ({question}) => {
+    const [value, setValue] = useState(Math.round((question.max + question.min)/2));
+
+    useEffect(() => {
+        const savedValue = localStorage.getItem(question._id);
+        if (savedValue) {
+            setValue(parseInt(savedValue));
+        }
+        else {
+            localStorage.setItem(question._id, value);
+        }
+    }, [question._id]);
+
     const handleChange = (event) => {
-        const value = parseInt(event.target.value);
-        setSelectedValue(value);
-        onChange(value);
-    }
+        const newValue = parseInt(event.target.value);
+        setValue(newValue);
+        localStorage.setItem(question._id, newValue);
+    };
+
     return (
-        <div className='range-wrapper'>
-            <label className='range-label'>
-                {selectedValue}
-            </label>
+        <div className='question-option-wrapper'>
+            <label className='question-range-label'>{value}</label>
             <input
+                className='question-range-input'
                 type='range'
-                className="range-input"
-                min={min}
-                max={max}
-                value={selectedValue}
-                onChange={handleChange}/>
+                min={question.min}
+                max={question.max}
+                step={question.step}
+                value={value}
+                onChange={handleChange}
+            />
         </div>
     );
 }

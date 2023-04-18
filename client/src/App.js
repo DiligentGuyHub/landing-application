@@ -29,7 +29,7 @@ function App() {
 
     return (
         <main>
-            <div style={{position: 'relative', overflow: 'hidden'}}>
+            <div className='component-wrapper'>
                 <BrandHeader isScrolled={isScrolled}/>
                 <VideoBackground isVisible={!isScrolled}/>
                 <QuestionForm isScrolled={isScrolled} />

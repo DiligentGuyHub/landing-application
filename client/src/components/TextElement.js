@@ -1,32 +1,40 @@
 import React, {useState, useEffect} from "react";
 import '../styles/TextElement.css'
 
-export const TextElement = ({prompt, regex, onBlur, onChange}) => {
-    const [input, setInput] = useState('');
-    const [error, setError] = useState('');
-    const validatorString = /^[a-zA-Zа-яА-Я]+\s[a-zA-Zа-яА-Я]+$/
-    const validator = new RegExp(validatorString);
+export const TextElement = ({question}) => {
+    const [value, setValue] = useState('');
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        const savedValue = localStorage.getItem(question._id);
+        if (savedValue) {
+            setValue(savedValue);
+        }
+    }, [question._id]);
 
     const handleChange = (event) => {
-        const newInput = event.target.value;
-        setInput(newInput);
-        onChange(newInput);
-    }
-
+        setValue(event.target.value);
+    };
     const handleBlur = (event) => {
-        validator.test(input) ? setError('') : setError('Error');
-        console.log(validator.test(input));
-        onBlur && onBlur(event);
-    }
+        const newValue = event.target.value;
+        const regex = new RegExp(question.regex);
+        if (!regex.test(value))  {
+            console.log('error');
+            setError(true);
+        } else {
+            setError(false);
+            localStorage.setItem(question._id, newValue);
+        }
+    };
     return (
-        <div className='text-wrapper'>
-            <label htmlFor={prompt}>{prompt}</label>
+        <div className="question-text-input-wrapper">
             <input
-                type='text'
-                className='text-input'
+                className={`question-text-input ${error ? 'question-text-input-error' : ''}`}
+                type="text"
+                value={value}
                 onBlur={handleBlur}
-                onChange={handleChange}/>
-            {error && <p className="error">{error}</p>}
+                onChange={handleChange}
+            />
         </div>
-    )
+    );
 }

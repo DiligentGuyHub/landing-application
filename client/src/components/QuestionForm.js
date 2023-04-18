@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from "react";
 import '../styles/QuestionForm.css';
-import {AnswerElement} from "./AnswerElement";
+import {OptionElement} from "./OptionElement";
 import {RangeElement} from "./RangeElement";
 import {TextElement} from "./TextElement";
+import {ProgressBar} from "./ProgressBar";
 import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';
 import Cookies from 'js-cookie';
@@ -10,7 +11,9 @@ import Cookies from 'js-cookie';
 export const QuestionForm = ({isScrolled}) => {
     const [questionForm, setQuestionForm] = useState([]);
     const [questionIndex, setQuestionIndex] = useState(0);
+    const [answers, setAnswers] = useState({});
     const [userId, setUserId] = useState('');
+    const [percentage, setPercentage] = useState(0);
 
     useEffect(() => {
         let userIdCookie = Cookies.get('userId');
@@ -21,6 +24,10 @@ export const QuestionForm = ({isScrolled}) => {
         }
         setUserId(userIdCookie);
     }, []);
+
+    useEffect(() => {
+        setPercentage((localStorage.length / questionForm.length) * 100);
+    }, [answers]);
 
     useEffect(() => {
         axios.get('http://localhost:4000/api/questions')
@@ -41,16 +48,18 @@ export const QuestionForm = ({isScrolled}) => {
     };
 
     const currentQuestion = questionForm[questionIndex];
-    const isContinueButtonEnabled = currentQuestion?.answers.length !== 0;
+    const isContinueButtonEnabled = questionIndex < questionForm.length - 1;
     const isBackButtonEnabled = questionIndex > 0;
 
     const renderAnswerInputs = (question) => {
         switch (question.type) {
             case 'radio':
             case 'checkbox':
-                return (<AnswerElement
-                    question={question}
-                    type={question.type}/>);
+                return (<OptionElement question={question}/>);
+            case 'range':
+                return (<RangeElement question={question}/>);
+            case 'text':
+                return (<TextElement question={question}/>);
         }
 
     }
@@ -62,19 +71,26 @@ export const QuestionForm = ({isScrolled}) => {
                     <div className='question'>
                         <div className='question-text'>{currentQuestion.text}</div>
                         {renderAnswerInputs(currentQuestion)}
-                        {isContinueButtonEnabled && (
-                            <div className="continue-button-wrapper">
-                                <button className="continue-button" onClick={handleContinueClick}>продолжить</button>
-                            </div>
-                        )}
-                        {isBackButtonEnabled && (
-                            <div className="continue-button-wrapper">
-                                <button className="continue-button" onClick={handleBackClick}>назад</button>
-                            </div>
-                        )}
+                        <div className="button-container">
+                            {isBackButtonEnabled && (
+                                <div className="back-button-wrapper">
+                                    <button className="back-button" onClick={handleBackClick}>предыдущий вопрос
+                                    </button>
+                                </div>
+                            )}
+                            {isContinueButtonEnabled && (
+                                <div className="continue-button-wrapper">
+                                    <button className="continue-button" onClick={handleContinueClick}>следующий
+                                        вопрос
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 )}
+                <ProgressBar percentage={percentage}/>
             </div>
         </div>
+
     );
 }

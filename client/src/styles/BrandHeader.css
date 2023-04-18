@@ -34,13 +34,9 @@
 }
 
 .header-wrapper.scrolled {
-    background-color: white;
+    background-color: var(--page-background-color);
     color: #3d1e13;
 }
-/*.header-wrapper.scrolled .header::after {*/
-/*  width: 100%;*/
-/*  animation: slideIn 1s ease;*/
-/*}*/
 
 @keyframes slideIn {
     from {
