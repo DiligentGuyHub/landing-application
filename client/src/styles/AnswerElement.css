@@ -1,37 +1,4 @@
-input[type="checkbox"], input[type="radio"] {
-    appearance: none;
-}
 
-.answer-wrapper {
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
-    width: 600px;
-}
-
-.answer-input {
-    margin-right: 10px;
-}
-
-.answer-label {
-    flex: 1;
-    padding: 10px;
-    background-color: #3d1e13;
-    border: 3px solid #3d1e13;
-    border-radius: 15px;
-    font-family: 'Montserrat', sans-serif;
-    cursor: pointer;
-}
-
-.answer-input:checked + .answer-label {
-    background-color: #3d1e13;
-    color: white;
-}
-
-.answer-input:not(:checked) + .answer-label {
-    background-color: white;
-    border: 3px solid #3d1e13;
-}
 
 .continue-button-wrapper {
     display: flex;
