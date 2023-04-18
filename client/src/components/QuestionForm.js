@@ -11,7 +11,6 @@ import Cookies from 'js-cookie';
 export const QuestionForm = ({isScrolled}) => {
     const [questionForm, setQuestionForm] = useState([]);
     const [questionIndex, setQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState({});
     const [userId, setUserId] = useState('');
     const [percentage, setPercentage] = useState(0);
 
@@ -26,8 +25,9 @@ export const QuestionForm = ({isScrolled}) => {
     }, []);
 
     useEffect(() => {
-        setPercentage((localStorage.length / questionForm.length) * 100);
-    }, [answers]);
+        const answeredQuestionsAmount = Object.keys(JSON.parse(localStorage.getItem('answers')) || {}).length;
+        setPercentage(Math.round(answeredQuestionsAmount / questionForm.length * 100));
+    }, [questionIndex, questionForm])
 
     useEffect(() => {
         axios.get('http://localhost:4000/api/questions')
@@ -46,6 +46,10 @@ export const QuestionForm = ({isScrolled}) => {
     const handleBackClick = (event) => {
         setQuestionIndex(prev => prev - 1);
     };
+
+    const handleSubmitClick = (event) => {
+
+    }
 
     const currentQuestion = questionForm[questionIndex];
     const isContinueButtonEnabled = questionIndex < questionForm.length - 1;

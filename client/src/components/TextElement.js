@@ -1,31 +1,40 @@
 import React, {useState, useEffect} from "react";
 import '../styles/TextElement.css'
 
-export const TextElement = ({question}) => {
+export const TextElement = ({ question }) => {
     const [value, setValue] = useState('');
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        const savedValue = localStorage.getItem(question._id);
-        if (savedValue) {
-            setValue(savedValue);
+        const savedAnswers = JSON.parse(localStorage.getItem('answers'));
+        if (savedAnswers && savedAnswers[question._id]) {
+            setValue(savedAnswers[question._id]);
         }
     }, [question._id]);
 
     const handleChange = (event) => {
         setValue(event.target.value);
     };
+
     const handleBlur = (event) => {
         const newValue = event.target.value;
         const regex = new RegExp(question.regex);
-        if (!regex.test(value))  {
+        if (!regex.test(value)) {
             console.log('error');
             setError(true);
         } else {
             setError(false);
-            localStorage.setItem(question._id, newValue);
+            const savedAnswers = JSON.parse(localStorage.getItem('answers'));
+            localStorage.setItem(
+                'answers',
+                JSON.stringify({
+                    ...savedAnswers,
+                    [question._id]: newValue,
+                })
+            );
         }
     };
+
     return (
         <div className="question-text-input-wrapper">
             <input
