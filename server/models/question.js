@@ -6,7 +6,6 @@ const answerSchema = new Schema({
 });
 
 const questionSchema = new Schema({
-    _id: {type: String},
     orderId: {type: Number, unique: true},
     text: {type: String, required: true},
     type: {type: String, enum: ['radio', 'checkbox', 'text', 'range'], required: true},
@@ -19,6 +18,4 @@ const questionSchema = new Schema({
     isActive: {type: Boolean, default: true}
 });
 
-const Question = mongoose.model('Question', questionSchema);
-
-module.exports = Question;
+module.exports = mongoose.models.Question || mongoose.model('Question', questionSchema);

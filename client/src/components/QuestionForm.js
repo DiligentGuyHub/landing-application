@@ -15,14 +15,11 @@ export const QuestionForm = ({isScrolled}) => {
     const [percentage, setPercentage] = useState(0);
 
     useEffect(() => {
-        let userIdCookie = Cookies.get('userId');
-        if (!userIdCookie) {
-            userIdCookie = uuidv4();
-            Cookies.set('userId', userIdCookie);
-            console.log(`user id created: ${userIdCookie}`);
+        if (userId) {
+            Cookies.set('userId', userId);
+            console.log(`user id created: ${userId}`);
         }
-        setUserId(userIdCookie);
-    }, []);
+    }, [userId]);
 
     useEffect(() => {
         const answeredQuestionsAmount = Object.keys(JSON.parse(localStorage.getItem('answers')) || {}).length;
@@ -55,9 +52,9 @@ export const QuestionForm = ({isScrolled}) => {
         };
         axios.post("http://localhost:4000/api/questions", data)
             .then((response) => {
-                console.log(response);
-                // Clear local storage and redirect to thank you page
-                // localStorage.removeItem("answers");
+                if(response.status === 200){
+                    setUserId(response.data.userId);
+                }
             })
             .catch((error) => {
                 console.log(error);

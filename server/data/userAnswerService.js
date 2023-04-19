@@ -1,11 +1,10 @@
 const UserAnswer = require('../models/userAnswer');
 
 
-const parseUserAnswers = (data, userId) => {
+const parseUserAnswers = (data) => {
     return Object.entries(data).map(([questionId, response]) => ({
-        user: userId,
         question: questionId,
-        response,
+        response
     }));
 }
 const insertUserAnswers = async (userAnswers) => {
