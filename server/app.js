@@ -3,8 +3,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Question = require("./models/question");
+const UserAnswer = require("./models/userAnswer");
 const app = express();
-
+const { checkIfUserExists, createUser } = require('./data/userService');
+const { getUserDataFromAnswers } = require('./data/questionService');
+const { insertUserAnswers, parseUserAnswers} = require('./data/userAnswerService');
 const dbUrl = 'mongodb://root:example@localhost:27017/mongodb?authSource=admin';
 
 mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -30,8 +33,27 @@ app.get('/api/questions/:orderId', async (req, res) => {
 })
 
 app.post('/api/questions/', async (req, res) => {
-    console.log(req.body);
-    res.send('Data received');
+    try {
+        const { userId, answers } = req.body;
+        const userAnswers = parseUserAnswers(answers, userId);
+        const { userName, userEmail, userAge } = await getUserDataFromAnswers(userAnswers);
+        const userExists = await checkIfUserExists(userEmail);
+
+        if (!userExists) {
+            await insertUserAnswers(userAnswers);
+            const newUser = await createUser(userId, userEmail, userName, userAge);
+            res.status(200).send('Data received');
+        }
+        else {
+            res.status(409).json({
+                message: "The user already exists."
+            });
+        }
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'An error occurred while saving user answers.'});
+    }
 });
 
 app.get('/api/questions/', async (req, res) => {

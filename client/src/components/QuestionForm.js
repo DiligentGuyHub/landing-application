@@ -48,12 +48,26 @@ export const QuestionForm = ({isScrolled}) => {
     };
 
     const handleSubmitClick = (event) => {
-
-    }
+        const answers = JSON.parse(localStorage.getItem("answers")) || {};
+        const data = {
+            userId,
+            answers,
+        };
+        axios.post("http://localhost:4000/api/questions", data)
+            .then((response) => {
+                console.log(response);
+                // Clear local storage and redirect to thank you page
+                // localStorage.removeItem("answers");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const currentQuestion = questionForm[questionIndex];
     const isContinueButtonEnabled = questionIndex < questionForm.length - 1;
     const isBackButtonEnabled = questionIndex > 0;
+    const isSubmitButtonEnabled = questionIndex === questionForm.length - 1 && percentage === 100;
 
     const renderAnswerInputs = (question) => {
         switch (question.type) {
@@ -77,17 +91,24 @@ export const QuestionForm = ({isScrolled}) => {
                         {renderAnswerInputs(currentQuestion)}
                         <div className="button-container">
                             {isBackButtonEnabled && (
-                                <div className="back-button-wrapper">
-                                    <button className="back-button" onClick={handleBackClick}>предыдущий вопрос
+                                <div className="button-wrapper back-button-wrapper">
+                                    <button className="navigation-button back-button" onClick={handleBackClick}>предыдущий вопрос
                                     </button>
                                 </div>
                             )}
                             {isContinueButtonEnabled && (
-                                <div className="continue-button-wrapper">
-                                    <button className="continue-button" onClick={handleContinueClick}>следующий
+                                <div className="button-wrapper continue-button-wrapper">
+                                    <button className="navigation-button continue-button" onClick={handleContinueClick}>следующий
                                         вопрос
                                     </button>
                                 </div>
+                            )}
+                            {isSubmitButtonEnabled && (
+                            <div className="button-wrapper submit-button-wrapper">
+                                <button className="navigation-button submit-button" onClick={handleSubmitClick}>
+                                    завершить опрос
+                                </button>
+                            </div>
                             )}
                         </div>
                     </div>
@@ -95,6 +116,5 @@ export const QuestionForm = ({isScrolled}) => {
                 <ProgressBar percentage={percentage}/>
             </div>
         </div>
-
     );
 }

@@ -162,23 +162,23 @@ input[type=range]::-webkit-slider-thumb {
     }
 }
 
-.continue-button-wrapper + .back-button-wrapper {
+.button-wrapper {
     margin-right: 10px;
 }
 
-.back-button-wrapper, .continue-button-wrapper {
+.button-wrapper {
     flex: 1;
     text-align: center;
 }
 
-.continue-button-wrapper, .back-button-wrapper {
+.button-wrapper {
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
     align-items: center;
 }
 
-.continue-button, .back-button {
+.navigation-button {
     text-align: left;
     font-family: 'Montserrat', sans-serif;
     color: darkred;
@@ -192,7 +192,7 @@ input[type=range]::-webkit-slider-thumb {
     transition: all 0.2s ease-in-out;
 }
 
-.continue-button:hover, .back-button:hover {
+.navigation-button:hover {
     background-color: darkred;
     color: white;
 }
