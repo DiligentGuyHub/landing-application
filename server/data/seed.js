@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
-const dbUrl = 'mongodb://root:example@localhost:27017/mongodb?authSource=admin';
+const config = require('../config.json');
 const Question = require('../models/question');
 const questions = require('./questions.json');
 
-const seed = async function () {
+const seed = async () => {
     await Question.deleteMany({});
     console.log('Existing documents removed successfully.');
     await Question.insertMany(questions);
     console.log('Questions seeded successfully.');
 }
 
-mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(config.connectionString, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
         console.log('Connected to MongoDB.')
     })
@@ -19,4 +19,4 @@ mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 seed().then(() => {
     mongoose.disconnect();
     console.log('Disconnected from MongoDB.');
-});;
+});

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800&display=swap');
 
 .App {
   text-align: center;
@@ -50,3 +50,29 @@
   background-color: var(--page-background-color);
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+.footer-wrapper {
+  display: flex;
+  background-color: darkred;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 10px;
+  font-family: 'Montserrat', sans-serif;
+  background-color: darkred;
+  color: white;
+  height: auto;
+  width: 100%;
+}
+
+.footer-column {
+  padding: 10px;
+}

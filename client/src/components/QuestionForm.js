@@ -5,21 +5,13 @@ import {RangeElement} from "./RangeElement";
 import {TextElement} from "./TextElement";
 import {ProgressBar} from "./ProgressBar";
 import axios from 'axios';
-import {v4 as uuidv4} from 'uuid';
-import Cookies from 'js-cookie';
+import labels from '../labels.json';
+import {NavigationBar} from "./NavigationBar";
 
-export const QuestionForm = ({isScrolled}) => {
+export const QuestionForm = ({isScrolled, handleUserCookie}) => {
     const [questionForm, setQuestionForm] = useState([]);
-    const [questionIndex, setQuestionIndex] = useState(0);
-    const [userId, setUserId] = useState('');
     const [percentage, setPercentage] = useState(0);
-
-    useEffect(() => {
-        if (userId) {
-            Cookies.set('userId', userId);
-            console.log(`user id created: ${userId}`);
-        }
-    }, [userId]);
+    const [questionIndex, setQuestionIndex] = useState(0);
 
     useEffect(() => {
         const answeredQuestionsAmount = Object.keys(JSON.parse(localStorage.getItem('answers')) || {}).length;
@@ -27,33 +19,34 @@ export const QuestionForm = ({isScrolled}) => {
     }, [questionIndex, questionForm])
 
     useEffect(() => {
-        axios.get('http://localhost:4000/api/questions')
+        axios.get(labels["http-get-questions"])
             .then(response => {
                 setQuestionForm(response.data.questions);
             })
             .catch(error => {
                 console.log(error);
             });
-    }, [userId]);
+    }, []);
 
-    const handleContinueClick = (event) => {
+    const handleContinueClick = () => {
         setQuestionIndex(prev => prev + 1);
     };
 
-    const handleBackClick = (event) => {
+    const handleBackClick = () => {
         setQuestionIndex(prev => prev - 1);
     };
 
-    const handleSubmitClick = (event) => {
-        const answers = JSON.parse(localStorage.getItem("answers")) || {};
-        const data = {
-            userId,
-            answers,
-        };
-        axios.post("http://localhost:4000/api/questions", data)
+    const handlePercentageChange = () => {
+        const answeredQuestionsAmount = Object.keys(JSON.parse(localStorage.getItem(labels["localstorage-path"])) || {}).length;
+        setPercentage(Math.round(answeredQuestionsAmount / questionForm.length * 100));
+    }
+
+    const handleSubmitClick = () => {
+        const answers = JSON.parse(localStorage.getItem(labels["localstorage-path"])) || {};
+        axios.post(labels["http-post-survey"], {answers})
             .then((response) => {
-                if(response.status === 200){
-                    setUserId(response.data.userId);
+                if (response.status === 200) {
+                    handleUserCookie(response.data.user);
                 }
             })
             .catch((error) => {
@@ -70,11 +63,11 @@ export const QuestionForm = ({isScrolled}) => {
         switch (question.type) {
             case 'radio':
             case 'checkbox':
-                return (<OptionElement question={question}/>);
+                return (<OptionElement question={question} handlePercentageChange={handlePercentageChange}/>);
             case 'range':
-                return (<RangeElement question={question}/>);
+                return (<RangeElement question={question} handlePercentageChange={handlePercentageChange}/>);
             case 'text':
-                return (<TextElement question={question}/>);
+                return (<TextElement question={question} handlePercentageChange={handlePercentageChange}/>);
         }
 
     }
@@ -86,28 +79,12 @@ export const QuestionForm = ({isScrolled}) => {
                     <div className='question'>
                         <div className='question-text'>{currentQuestion.text}</div>
                         {renderAnswerInputs(currentQuestion)}
-                        <div className="button-container">
-                            {isBackButtonEnabled && (
-                                <div className="button-wrapper back-button-wrapper">
-                                    <button className="navigation-button back-button" onClick={handleBackClick}>предыдущий вопрос
-                                    </button>
-                                </div>
-                            )}
-                            {isContinueButtonEnabled && (
-                                <div className="button-wrapper continue-button-wrapper">
-                                    <button className="navigation-button continue-button" onClick={handleContinueClick}>следующий
-                                        вопрос
-                                    </button>
-                                </div>
-                            )}
-                            {isSubmitButtonEnabled && (
-                            <div className="button-wrapper submit-button-wrapper">
-                                <button className="navigation-button submit-button" onClick={handleSubmitClick}>
-                                    завершить опрос
-                                </button>
-                            </div>
-                            )}
-                        </div>
+                        <NavigationBar isBackButtonEnabled={isBackButtonEnabled}
+                                       isContinueButtonEnabled={isContinueButtonEnabled}
+                                       isSubmitButtonEnabled={isSubmitButtonEnabled}
+                                       handleBackClick={handleBackClick}
+                                       handleContinueClick={handleContinueClick}
+                                       handleSubmitClick={handleSubmitClick}/>
                     </div>
                 )}
                 <ProgressBar percentage={percentage}/>

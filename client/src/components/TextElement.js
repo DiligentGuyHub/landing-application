@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from "react";
-import '../styles/TextElement.css'
 
-export const TextElement = ({ question }) => {
+export const TextElement = ({question, handlePercentageChange}) => {
     const [value, setValue] = useState('');
     const [error, setError] = useState(false);
 
     useEffect(() => {
         const savedAnswers = JSON.parse(localStorage.getItem('answers'));
         if (savedAnswers && savedAnswers[question._id]) {
+            console.log(question._id);
             setValue(savedAnswers[question._id]);
+        } else {
+            setValue('');
         }
     }, [question._id]);
 
@@ -32,6 +34,7 @@ export const TextElement = ({ question }) => {
                     [question._id]: newValue,
                 })
             );
+            handlePercentageChange();
         }
     };
 

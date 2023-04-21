@@ -1,11 +1,10 @@
-import '../styles/AnswerElement.css';
 import React, {useState, useEffect} from 'react';
-
-export const OptionElement = ({question, handlePercentageChange}) => {
+import labels from '../labels.json'
+export const OptionElement = ({question}) => {
     const [answers, setAnswers] = useState([]);
 
     useEffect(() => {
-        const savedAnswers = JSON.parse(localStorage.getItem('answers'));
+        const savedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]));
         if (savedAnswers) {
             const questionAnswers = savedAnswers[question._id] || [];
             console.log(questionAnswers);
@@ -26,13 +25,13 @@ export const OptionElement = ({question, handlePercentageChange}) => {
         }
         setAnswers(newAnswers);
         const answersObj = {
-            ...JSON.parse(localStorage.getItem('answers')),
+            ...JSON.parse(localStorage.getItem(labels["localstorage-path"])),
             [question._id]: newAnswers,
         };
         if (newAnswers.length === 0) {
             delete answersObj[question._id];
         }
-        localStorage.setItem('answers', JSON.stringify(answersObj));
+        localStorage.setItem(labels["localstorage-path"], JSON.stringify(answersObj));
     };
 
     return (
@@ -40,9 +39,9 @@ export const OptionElement = ({question, handlePercentageChange}) => {
             {question.answers.map((option) => (
                 <div className='question-option' key={option._id}>
                     <input
+                        className="question-option-input"
                         type={question.type}
                         name='option'
-                        className="question-option-input"
                         id={option._id}
                         value={option.text}
                         checked={answers.includes(option._id)}

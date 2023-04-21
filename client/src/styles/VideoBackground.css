@@ -12,6 +12,7 @@
     }
     to {
         transform: translateY(-100vh);
+        height: 0;
     }
 }
 
@@ -21,6 +22,7 @@
     }
     to {
         transform: translateY(0);
+        height: 100vh;
     }
 }
 

@@ -5,8 +5,6 @@
     --dark-fruit-chocolate: #852222;
     --fruit-chocolate: #a32828;
     --light-fruit-chocolate: #bf2d2d;
-    --question-font-size: calc(0.75vw + 2vh);
-    --option-font-size: calc(0.25vw + 1.5vh);
 }
 
 .question-form {
@@ -44,6 +42,27 @@ input[type="checkbox"], input[type="radio"] {
     margin-bottom: 10px;
     font-size: var(--question-font-size);
     font-weight: bold;
+}
+
+@media (max-width: 767px) {
+    :root {
+        --question-font-size: 20px;
+        --option-font-size: 14px;
+    }
+}
+
+@media (min-width: 1200px) {
+    :root {
+        --question-font-size: 24px;
+        --option-font-size: 16px;
+    }
+}
+
+@media (min-width: 2000px) {
+    :root {
+        --question-font-size: 42px;
+        --option-font-size: 36px;
+    }
 }
 
 .question-text::after {
@@ -198,7 +217,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .progress-bar {
-    height: 20px;
+    height: 2vh;
     width: 50vw;
     border-radius: 10px;
     background-color: darkgray;
@@ -224,6 +243,6 @@ input[type=range]::-webkit-slider-thumb {
     transform: translateX(-50%);
     color: white;
     font-weight: bold;
-    font-size: 12px;
+    font-size: var(--option-font-size);
     line-height: 20px;
 }

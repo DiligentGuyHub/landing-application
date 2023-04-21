@@ -1,0 +1,11 @@
+{
+  "company-name": "Chocolique",
+  "next-question-button": "следующий вопрос",
+  "prev-question-button": "предыдущий вопрос",
+  "submit-survey-button": "завершить опрос",
+  "gratification-header": "Спасибо за участие в опросе!",
+  "gratification-message": "Проверьте указанную почту. Там вы найдете приятный сюрприз!",
+  "localstorage-path": "answers",
+  "http-get-questions": "http://localhost:4000/api/questions",
+  "http-post-survey": "http://localhost:4000/api/questions"
+}
