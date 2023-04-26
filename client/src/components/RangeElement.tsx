@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
+import { QuestionFormElement } from './QuestionForm'
 
-export const RangeElement = ({question}) => {
+export const RangeElement = ({ question }: QuestionFormElement) => {
     const [value, setValue] = useState(Math.round((question.max + question.min) / 2));
-    const answers = JSON.parse(localStorage.getItem('answers'));
+    const answers = JSON.parse(localStorage.getItem('answers') || '');
 
     useEffect(() => {
         if (answers && answers[question._id]) {
@@ -12,7 +13,7 @@ export const RangeElement = ({question}) => {
         }
     }, [question._id]);
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = parseInt(event.target.value);
         setValue(newValue);
         localStorage.setItem('answers', JSON.stringify({...answers, [question._id]: newValue}));
@@ -26,7 +27,6 @@ export const RangeElement = ({question}) => {
                 type='range'
                 min={question.min}
                 max={question.max}
-                step={question.step}
                 value={value}
                 onChange={handleChange}
             />

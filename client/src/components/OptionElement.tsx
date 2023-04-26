@@ -1,19 +1,22 @@
 import React, {useState, useEffect} from 'react';
+// @ts-ignore
 import labels from '../labels.json'
-export const OptionElement = ({question}) => {
-    const [answers, setAnswers] = useState([]);
+import {QuestionFormElement} from "./QuestionForm";
+
+export const OptionElement = ({question}: QuestionFormElement) => {
+    const [answers, setAnswers] = useState<string[]>([]);
 
     useEffect(() => {
-        const savedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]));
+        const savedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]) || '');
         if (savedAnswers) {
             const questionAnswers = savedAnswers[question._id] || [];
             console.log(questionAnswers);
             setAnswers(questionAnswers);
         }
     }, [question._id]);
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedAnswer = event.target.id;
-        let newAnswers;
+        let newAnswers : string [];
         if (question.type === 'radio') {
             newAnswers = [selectedAnswer];
         } else {
@@ -25,7 +28,7 @@ export const OptionElement = ({question}) => {
         }
         setAnswers(newAnswers);
         const answersObj = {
-            ...JSON.parse(localStorage.getItem(labels["localstorage-path"])),
+            ...JSON.parse(localStorage.getItem(labels["localstorage-path"]) || ''),
             [question._id]: newAnswers,
         };
         if (newAnswers.length === 0) {

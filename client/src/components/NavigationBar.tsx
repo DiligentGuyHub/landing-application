@@ -1,5 +1,15 @@
+// @ts-ignore
 import labels from "../labels.json";
 import React from "react";
+
+interface NavigationProps {
+    isBackButtonEnabled: boolean;
+    isContinueButtonEnabled: boolean;
+    isSubmitButtonEnabled: boolean;
+    handleBackClick: () => void;
+    handleContinueClick: () => void;
+    handleSubmitClick: () => void;
+}
 
 export const NavigationBar = ({
                                   isBackButtonEnabled,
@@ -8,7 +18,7 @@ export const NavigationBar = ({
                                   handleBackClick,
                                   handleContinueClick,
                                   handleSubmitClick
-                              }) => {
+                              }: NavigationProps) => {
     return (<div className="button-container">
         {isBackButtonEnabled && (
             <div className="button-wrapper back-button-wrapper">

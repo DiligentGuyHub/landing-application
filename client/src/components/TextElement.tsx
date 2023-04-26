@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from "react";
+import {QuestionFormElement} from "./QuestionForm"
 
-export const TextElement = ({question, handlePercentageChange}) => {
+export const TextElement = ({question, handlePercentageChange}: QuestionFormElement) => {
     const [value, setValue] = useState('');
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        const savedAnswers = JSON.parse(localStorage.getItem('answers'));
+        const savedAnswers = JSON.parse(localStorage.getItem('answers') || '');
         if (savedAnswers && savedAnswers[question._id]) {
             console.log(question._id);
             setValue(savedAnswers[question._id]);
@@ -14,11 +15,11 @@ export const TextElement = ({question, handlePercentageChange}) => {
         }
     }, [question._id]);
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value);
     };
 
-    const handleBlur = (event) => {
+    const handleBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         const regex = new RegExp(question.regex);
         if (!regex.test(value)) {
@@ -26,7 +27,7 @@ export const TextElement = ({question, handlePercentageChange}) => {
             setError(true);
         } else {
             setError(false);
-            const savedAnswers = JSON.parse(localStorage.getItem('answers'));
+            const savedAnswers = JSON.parse(localStorage.getItem('answers') || '');
             localStorage.setItem(
                 'answers',
                 JSON.stringify({

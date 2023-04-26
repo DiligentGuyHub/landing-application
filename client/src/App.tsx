@@ -4,21 +4,22 @@ import {VideoBackground} from './components/VideoBackground';
 import {QuestionForm} from './components/QuestionForm';
 import {BrandHeader} from "./components/BrandHeader";
 import {GratificationMessage} from "./components/GratificationMessage";
+// @ts-ignore
 import Cookies from 'js-cookie';
-function App() {
+
+interface User {
+    userId: string;
+    name: string;
+    email: string;
+    age: string;
+}
+
+
+function App(): JSX.Element {
     const [isScrolled, setIsScrolled] = useState(false);
-    const [userId, setUserId] = useState('');
     const [isQuizCompleted, setIsQuizCompleted] = useState(Cookies.get('userId'));
 
-    useEffect(() => {
-        if (Cookies.get('userId')) {
-            setUserId(Cookies.get('userId'));
-        }
-        else {
-            setUserId('');
-        }
-    }, [isQuizCompleted]);
-    const handleUserCookie = (user) => {
+    const handleUserCookie = (user: User) => {
         Cookies.set('userId', user.userId);
         setIsQuizCompleted(true);
         console.log(`New cookie created: ${user.userId}`);

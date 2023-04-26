@@ -5,16 +5,48 @@ import {RangeElement} from "./RangeElement";
 import {TextElement} from "./TextElement";
 import {ProgressBar} from "./ProgressBar";
 import axios from 'axios';
-import labels from '../labels.json';
 import {NavigationBar} from "./NavigationBar";
 
-export const QuestionForm = ({isScrolled, handleUserCookie}) => {
-    const [questionForm, setQuestionForm] = useState([]);
-    const [percentage, setPercentage] = useState(0);
-    const [questionIndex, setQuestionIndex] = useState(0);
+// @ts-ignore
+import labels from '../labels.json';
+
+interface QuestionFormProps {
+    isScrolled: boolean;
+    handleUserCookie: (user: any) => void;
+}
+
+interface Answer {
+    _id: string;
+    text: string;
+}
+
+interface Question {
+    _id: string;
+    orderId: number;
+    text: string;
+    type: string;
+    field: string;
+    answers: [Answer],
+    regex: string;
+    regexMessage: string;
+    min: number;
+    max: number;
+    isActive: boolean;
+}
+
+export interface QuestionFormElement {
+    question: Question;
+    handlePercentageChange: () => void;
+}
+
+export const QuestionForm = ({isScrolled, handleUserCookie}: QuestionFormProps) => {
+    const [questionForm, setQuestionForm] = useState<Question[]>([]);
+    const [percentage, setPercentage] = useState<number>(0);
+    const [questionIndex, setQuestionIndex] = useState<number>(0);
 
     useEffect(() => {
-        const answeredQuestionsAmount = Object.keys(JSON.parse(localStorage.getItem('answers')) || {}).length;
+        const parsedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]) || '');
+        const answeredQuestionsAmount = Object.keys(parsedAnswers).length;
         setPercentage(Math.round(answeredQuestionsAmount / questionForm.length * 100));
     }, [questionIndex, questionForm])
 
@@ -37,13 +69,14 @@ export const QuestionForm = ({isScrolled, handleUserCookie}) => {
     };
 
     const handlePercentageChange = () => {
-        const answeredQuestionsAmount = Object.keys(JSON.parse(localStorage.getItem(labels["localstorage-path"])) || {}).length;
+        const parsedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]) || '');
+        const answeredQuestionsAmount = Object.keys(parsedAnswers).length;
         setPercentage(Math.round(answeredQuestionsAmount / questionForm.length * 100));
     }
 
     const handleSubmitClick = () => {
-        const answers = JSON.parse(localStorage.getItem(labels["localstorage-path"])) || {};
-        axios.post(labels["http-post-survey"], {answers})
+        const parsedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]) || '');
+        axios.post(labels["http-post-survey"], {parsedAnswers})
             .then((response) => {
                 if (response.status === 200) {
                     handleUserCookie(response.data.user);
@@ -59,7 +92,7 @@ export const QuestionForm = ({isScrolled, handleUserCookie}) => {
     const isBackButtonEnabled = questionIndex > 0;
     const isSubmitButtonEnabled = questionIndex === questionForm.length - 1 && percentage === 100;
 
-    const renderAnswerInputs = (question) => {
+    const renderAnswerInputs = (question: Question) => {
         switch (question.type) {
             case 'radio':
             case 'checkbox':
