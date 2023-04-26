@@ -10,29 +10,22 @@ const {getUserDataFromAnswers, getQuestionById, getAnswerById} = require('./serv
 const {insertUserAnswers, parseUserAnswers} = require('./services/userAnswerService');
 const {sendEmail} = require('./services/emailService');
 const config = require('./config.json');
+const seedModule = require('./data/seed');
 
 const mongo_uri = process.env.MONGO_URI || config.connectionString;
 mongoose.connect(mongo_uri, {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => console.log('Connected to MongoDB'))
+    .then(async () => {
+        console.log('Connected to MongoDB');
+        const questionsCount = await Question.countDocuments();
+        if (!questionsCount) {
+            seedModule.seed();
+        }
+    })
     .catch(err => console.error('Error connecting to MongoDB', err));
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-
-app.get('/api/questions/:orderId', async (req, res) => {
-    const orderId = parseInt(req.params.orderId);
-    try {
-        const question = await Question.findOne({orderId: orderId});
-        if (!question) {
-            return res.status(404).json({message: 'Question not found'});
-        }
-        res.json({question});
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({message: err.message});
-    }
-})
 
 app.post('/api/questions/', async (req, res) => {
     try {
@@ -60,7 +53,7 @@ app.post('/api/questions/', async (req, res) => {
     }
 });
 
-app.get('/api/questions/', async (zreq, res) => {
+app.get('/api/questions/', async (req, res) => {
     try {
         const questions = await Question.find({isActive: true});
         if (!questions) {
@@ -72,7 +65,6 @@ app.get('/api/questions/', async (zreq, res) => {
         res.status(500).json({message: err.message});
     }
 });
-
 app.get('/api/user-answers/', async (req, res) => {
     try {
         const userAnswers = await UserAnswer.find().lean();
