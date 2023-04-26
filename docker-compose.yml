@@ -9,12 +9,15 @@ services:
     environment:
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
+      - MONGO_URI=mongodb://root:example@mongodb:27017/mongodb?authSource=admin
     container_name: node-container
     ports:
       - '4000:4000'
     volumes:
       - './server:/app'
       - '/app/node_modules'
+    networks:
+      - landing-network
   client:
     container_name: react-container
     build:
@@ -31,6 +34,8 @@ services:
     stdin_open: true
     tty: true
     command: npm start
+    networks:
+      - landing-network
   mongodb:
     image: mongo
     container_name: mongodb
@@ -44,6 +49,7 @@ services:
       - "27017:27017"
     networks:
       - landing-network
+
 networks:
   landing-network:
     driver: bridge

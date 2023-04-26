@@ -4,7 +4,6 @@ import {VideoBackground} from './components/VideoBackground';
 import {QuestionForm} from './components/QuestionForm';
 import {BrandHeader} from "./components/BrandHeader";
 import {GratificationMessage} from "./components/GratificationMessage";
-// @ts-ignore
 import Cookies from 'js-cookie';
 
 interface User {
@@ -17,7 +16,8 @@ interface User {
 
 function App(): JSX.Element {
     const [isScrolled, setIsScrolled] = useState(false);
-    const [isQuizCompleted, setIsQuizCompleted] = useState(Cookies.get('userId'));
+    // @ts-ignore
+    const [isQuizCompleted, setIsQuizCompleted] = useState<boolean>(Cookies.get('userId'));
 
     const handleUserCookie = (user: User) => {
         Cookies.set('userId', user.userId);

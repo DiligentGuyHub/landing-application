@@ -11,7 +11,8 @@ const {insertUserAnswers, parseUserAnswers} = require('./services/userAnswerServ
 const {sendEmail} = require('./services/emailService');
 const config = require('./config.json');
 
-mongoose.connect(config.connectionString, {useNewUrlParser: true, useUnifiedTopology: true})
+const mongo_uri = process.env.MONGO_URI || config.connectionString;
+mongoose.connect(mongo_uri, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Error connecting to MongoDB', err));
 
