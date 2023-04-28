@@ -7,10 +7,10 @@ export const OptionElement = ({question}: QuestionFormElement) => {
     const [answers, setAnswers] = useState<string[]>([]);
 
     useEffect(() => {
-        const savedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]) || '');
+        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
+        const savedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
         if (savedAnswers) {
             const questionAnswers = savedAnswers[question._id] || [];
-            console.log(questionAnswers);
             setAnswers(questionAnswers);
         }
     }, [question._id]);
@@ -27,8 +27,10 @@ export const OptionElement = ({question}: QuestionFormElement) => {
             }
         }
         setAnswers(newAnswers);
+        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
+        const savedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
         const answersObj = {
-            ...JSON.parse(localStorage.getItem(labels["localstorage-path"]) || ''),
+            savedAnswers,
             [question._id]: newAnswers,
         };
         if (newAnswers.length === 0) {

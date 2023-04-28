@@ -45,7 +45,8 @@ export const QuestionForm = ({isScrolled, handleUserCookie}: QuestionFormProps) 
     const [questionIndex, setQuestionIndex] = useState<number>(0);
 
     useEffect(() => {
-        const parsedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]) || '');
+        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
+        const parsedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
         const answeredQuestionsAmount = Object.keys(parsedAnswers).length;
         setPercentage(Math.round(answeredQuestionsAmount / questionForm.length * 100));
     }, [questionIndex, questionForm])
@@ -69,13 +70,15 @@ export const QuestionForm = ({isScrolled, handleUserCookie}: QuestionFormProps) 
     };
 
     const handlePercentageChange = () => {
-        const parsedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]) || '');
+        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
+        const parsedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
         const answeredQuestionsAmount = Object.keys(parsedAnswers).length;
         setPercentage(Math.round(answeredQuestionsAmount / questionForm.length * 100));
     }
 
     const handleSubmitClick = () => {
-        const parsedAnswers = JSON.parse(localStorage.getItem(labels["localstorage-path"]) || '');
+        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
+        const parsedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
         axios.post(labels["http-post-survey"], {parsedAnswers})
             .then((response) => {
                 if (response.status === 200) {
