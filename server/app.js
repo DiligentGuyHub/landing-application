@@ -18,7 +18,7 @@ mongoose.connect(mongo_uri, {useNewUrlParser: true, useUnifiedTopology: true})
         console.log('Connected to MongoDB');
         const questionsCount = await Question.countDocuments();
         if (!questionsCount) {
-            seedModule.seed();
+            await seedModule.seed();
         }
     })
     .catch(err => console.error('Error connecting to MongoDB', err));
