@@ -1,51 +1,24 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import {QuestionFormElement} from "./QuestionForm"
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../reducers/RootReducer";
+import {updateAnswers} from "../actions/AnswersActions";
 
-export const TextElement = ({question, handlePercentageChange}: QuestionFormElement) => {
-    const [value, setValue] = useState('');
-    const [error, setError] = useState(false);
-
-    useEffect(() => {
-        const savedAnswers = JSON.parse(localStorage.getItem('answers') || '');
-        if (savedAnswers && savedAnswers[question._id]) {
-            console.log(question._id);
-            setValue(savedAnswers[question._id]);
-        } else {
-            setValue('');
-        }
-    }, [question._id]);
+export const TextElement = ({question}: QuestionFormElement) => {
+    const dispatch = useDispatch();
+    const answer = useSelector((state: RootState) => state.responses[question._id]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
-    };
-
-    const handleBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
-        const regex = new RegExp(question.regex);
-        if (!regex.test(value)) {
-            console.log('error');
-            setError(true);
-        } else {
-            setError(false);
-            const savedAnswers = JSON.parse(localStorage.getItem('answers') || '');
-            localStorage.setItem(
-                'answers',
-                JSON.stringify({
-                    ...savedAnswers,
-                    [question._id]: newValue,
-                })
-            );
-            handlePercentageChange();
-        }
+        dispatch(updateAnswers(question._id, newValue));
     };
 
     return (
         <div className="question-text-input-wrapper">
             <input
-                className={`question-text-input ${error ? 'question-text-input-error' : ''}`}
+                className="question-text-input"
                 type="text"
-                value={value}
-                onBlur={handleBlur}
+                value={answer || ''}
                 onChange={handleChange}
             />
         </div>

@@ -1,42 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 // @ts-ignore
 import labels from '../labels.json'
 import {QuestionFormElement} from "./QuestionForm";
+import {useDispatch, useSelector} from 'react-redux';
+import {addAnswer, removeAnswer} from '../actions/AnswersActions';
+import {getAnswersForQuestion} from "../reducers/AnswersReducer";
+import {RootState} from "../reducers/RootReducer";
 
 export const OptionElement = ({question}: QuestionFormElement) => {
-    const [answers, setAnswers] = useState<string[]>([]);
+    const dispatch = useDispatch();
+    const answers = useSelector((state: RootState) => getAnswersForQuestion(state, question._id));
 
-    useEffect(() => {
-        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
-        const savedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
-        if (savedAnswers) {
-            const questionAnswers = savedAnswers[question._id] || [];
-            setAnswers(questionAnswers);
-        }
-    }, [question._id]);
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedAnswer = event.target.id;
-        let newAnswers : string [];
-        if (question.type === 'radio') {
-            newAnswers = [selectedAnswer];
+        const {type} = question;
+
+        if (type === 'radio') {
+            dispatch(addAnswer(question._id, selectedAnswer));
         } else {
             if (event.target.checked) {
-                newAnswers = [...answers, selectedAnswer];
+                dispatch(addAnswer(question._id, selectedAnswer));
             } else {
-                newAnswers = answers.filter((answer) => answer !== selectedAnswer);
+                dispatch(removeAnswer(question._id, selectedAnswer));
             }
         }
-        setAnswers(newAnswers);
-        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
-        const savedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
-        const answersObj = {
-            savedAnswers,
-            [question._id]: newAnswers,
-        };
-        if (newAnswers.length === 0) {
-            delete answersObj[question._id];
-        }
-        localStorage.setItem(labels["localstorage-path"], JSON.stringify(answersObj));
     };
 
     return (

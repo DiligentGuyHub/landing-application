@@ -25,16 +25,20 @@ const mailOptions = (email) => {
 };
 
 const sendEmail = async (email) => {
-    const options = mailOptions(email);
-    await transporter.sendMail(options, (error, info) => {
-        if (error) {
-            console.log(error);
-            return false;
-        } else {
-            console.log('Email sent: ' + info.response);
-            return true;
-        }
-    });
+    if (config.emailEnabled) {
+        const options = mailOptions(email);
+        await transporter.sendMail(options, (error, info) => {
+            if (error) {
+                console.log(error);
+                return false;
+            } else {
+                console.log('Email sent: ' + info.response);
+                return true;
+            }
+        });
+    } else {
+        console.log('Email dispatch disabled');
+    }
 }
 
 module.exports = {

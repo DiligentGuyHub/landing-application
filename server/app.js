@@ -29,8 +29,8 @@ app.use(bodyParser.json());
 
 app.post('/api/questions/', async (req, res) => {
     try {
-        const {answers} = req.body;
-        const userAnswers = parseUserAnswers(answers);
+        const {responses} = req.body;
+        const userAnswers = parseUserAnswers(responses);
         const {userName, userEmail, userAge} = await getUserDataFromAnswers(userAnswers);
         const userExists = await checkIfUserExists(userEmail);
 
@@ -42,9 +42,9 @@ app.post('/api/questions/', async (req, res) => {
             await sendEmail(userEmail);
             res.status(200).json({user});
         } else {
-            console.log('user was not created');
+            console.log('User already exists');
             res.status(409).json({
-                message: "The user already exists."
+                message: "Пользователь с указанной почтой уже проходил опрос."
             });
         }
     } catch (err) {

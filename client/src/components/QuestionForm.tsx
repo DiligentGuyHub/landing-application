@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import '../styles/QuestionForm.css';
 import {OptionElement} from "./OptionElement";
 import {RangeElement} from "./RangeElement";
@@ -9,6 +9,10 @@ import {NavigationBar} from "./NavigationBar";
 
 // @ts-ignore
 import labels from '../labels.json';
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../reducers/RootReducer";
+import {decrementIndex, getQuestions, incrementIndex} from "../actions/QuestionFormActions";
+import {getQuestionIndex} from "../reducers/FormReducer";
 
 interface QuestionFormProps {
     isScrolled: boolean;
@@ -20,7 +24,7 @@ interface Answer {
     text: string;
 }
 
-interface Question {
+export interface Question {
     _id: string;
     orderId: number;
     text: string;
@@ -36,25 +40,20 @@ interface Question {
 
 export interface QuestionFormElement {
     question: Question;
-    handlePercentageChange: () => void;
 }
 
 export const QuestionForm = ({isScrolled, handleUserCookie}: QuestionFormProps) => {
-    const [questionForm, setQuestionForm] = useState<Question[]>([]);
-    const [percentage, setPercentage] = useState<number>(0);
-    const [questionIndex, setQuestionIndex] = useState<number>(0);
-
-    useEffect(() => {
-        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
-        const parsedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
-        const answeredQuestionsAmount = Object.keys(parsedAnswers).length;
-        setPercentage(Math.round(answeredQuestionsAmount / questionForm.length * 100));
-    }, [questionIndex, questionForm])
+    const questionForm = useSelector((state: RootState) => state.form.questionForm);
+    const dispatch = useDispatch();
+    const questionIndex = useSelector((state: RootState) => getQuestionIndex(state));
+    const responses = useSelector((state: RootState) => state.responses);
+    const responsesCount = Object.keys(Object.entries(responses).filter(([key, value]) => value.length > 0)).length;
+    const percentage = Math.round((responsesCount / questionForm.length) * 100);
 
     useEffect(() => {
         axios.get(labels["http-get-questions"])
             .then(response => {
-                setQuestionForm(response.data.questions);
+                dispatch(getQuestions(response.data));
             })
             .catch(error => {
                 console.log(error);
@@ -62,31 +61,24 @@ export const QuestionForm = ({isScrolled, handleUserCookie}: QuestionFormProps) 
     }, []);
 
     const handleContinueClick = () => {
-        setQuestionIndex(prev => prev + 1);
+        dispatch(incrementIndex());
     };
 
     const handleBackClick = () => {
-        setQuestionIndex(prev => prev - 1);
+        dispatch(decrementIndex());
     };
 
-    const handlePercentageChange = () => {
-        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
-        const parsedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
-        const answeredQuestionsAmount = Object.keys(parsedAnswers).length;
-        setPercentage(Math.round(answeredQuestionsAmount / questionForm.length * 100));
-    }
-
     const handleSubmitClick = () => {
-        const localStorageValue = localStorage.getItem(labels["localstorage-path"]);
-        const parsedAnswers = localStorageValue ? JSON.parse(localStorageValue) : {};
-        axios.post(labels["http-post-survey"], {parsedAnswers})
+        axios.post(labels["http-post-survey"], {responses})
             .then((response) => {
-                if (response.status === 200) {
+                if (response.status === 200 && response.data.user) {
                     handleUserCookie(response.data.user);
                 }
             })
             .catch((error) => {
-                console.log(error);
+                if(error.response.status === 409) {
+                    alert(error.response.data.message);
+                }
             });
     };
 
@@ -99,11 +91,11 @@ export const QuestionForm = ({isScrolled, handleUserCookie}: QuestionFormProps) 
         switch (question.type) {
             case 'radio':
             case 'checkbox':
-                return (<OptionElement question={question} handlePercentageChange={handlePercentageChange}/>);
+                return (<OptionElement question={question}/>);
             case 'range':
-                return (<RangeElement question={question} handlePercentageChange={handlePercentageChange}/>);
+                return (<RangeElement question={question}/>);
             case 'text':
-                return (<TextElement question={question} handlePercentageChange={handlePercentageChange}/>);
+                return (<TextElement question={question}/>);
         }
 
     }

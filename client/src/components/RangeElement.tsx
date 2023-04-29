@@ -1,33 +1,31 @@
-import React, {useState, useEffect} from 'react';
-import { QuestionFormElement } from './QuestionForm'
+import React from 'react';
+import {QuestionFormElement} from './QuestionForm'
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../reducers/RootReducer";
+import {updateAnswers} from "../actions/AnswersActions";
 
-export const RangeElement = ({ question }: QuestionFormElement) => {
-    const [value, setValue] = useState(Math.round((question.max + question.min) / 2));
-    const answers = JSON.parse(localStorage.getItem('answers') || '');
+export const RangeElement = ({question}: QuestionFormElement) => {
+    const dispatch = useDispatch();
+    const answer = useSelector((state: RootState) => state.responses[question._id]);
+    const defaultValue = Math.round((question.max + question.min) / 2);
 
-    useEffect(() => {
-        if (answers && answers[question._id]) {
-            setValue(parseInt(answers[question._id]));
-        } else {
-            localStorage.setItem('answers', JSON.stringify({...answers, [question._id]: value}));
-        }
-    }, [question._id]);
-
+    if (!answer) {
+        dispatch(updateAnswers(question._id, String(defaultValue)));
+    }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = parseInt(event.target.value);
-        setValue(newValue);
-        localStorage.setItem('answers', JSON.stringify({...answers, [question._id]: newValue}));
+        const selectedValue = event.target.value;
+        dispatch(updateAnswers(question._id, selectedValue));
     };
 
     return (
         <div className='question-option-wrapper'>
-            <label className='question-range-label'>{value}</label>
+            <label className='question-range-label'>{answer || defaultValue}</label>
             <input
                 className='question-range-input'
                 type='range'
                 min={question.min}
                 max={question.max}
-                value={value}
+                value={answer || defaultValue}
                 onChange={handleChange}
             />
         </div>
