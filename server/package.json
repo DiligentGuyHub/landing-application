@@ -10,9 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.1",
     "body-parser": "^1.0.0",
     "cors": "latest",
-    "nodemon": "latest"
+    "express": "^4.16.1",
+    "mongoose": "^7.0.3",
+    "nodemailer": "^6.9.1",
+    "nodemon": "latest",
+    "uuid": "^9.0.0"
   }
 }

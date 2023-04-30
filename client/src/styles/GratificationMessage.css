@@ -1,0 +1,18 @@
+.gratification-message {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+    font-size: var(--option-font-size);
+    font-weight: 500;
+}
+
+.gratification-message h1::after {
+    content: "";
+    display: block;
+    margin-top: 5px;
+    border-bottom: 4px solid darkred;
+}
