@@ -2,5 +2,6 @@
   "connectionString": "mongodb://root:example@localhost:27017/mongodb?authSource=admin",
   "emailEnabled": false,
   "emailProviderLogin": "",
-  "emailProviderPassword": ""
+  "emailProviderPassword": "",
+  "jwtSecretKey": ""
 }

@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Question = require("./models/question");
+const Admin = require("./models/admin");
 const UserAnswer = require("./models/userAnswer");
 const User = require("./models/user");
 const {checkIfUserExists, createUser} = require('./services/userService');
@@ -11,6 +12,8 @@ const {insertUserAnswers, parseUserAnswers} = require('./services/userAnswerServ
 const {sendEmail} = require('./services/emailService');
 const config = require('./config.json');
 const seedModule = require('./data/seed');
+const jwt = require('jsonwebtoken');
+const {verifyToken, isValidCredentials, isUsernameUnique} = require("./services/authenticationService");
 
 const mongo_uri = process.env.MONGO_URI || config.connectionString;
 mongoose.connect(mongo_uri, {useNewUrlParser: true, useUnifiedTopology: true})
@@ -101,6 +104,34 @@ app.get('/api/user-answers/', async (req, res) => {
 app.get('/', (req, res) => {
     return res.status(200).json({message: 'Server API is available'});
 })
+
+app.post('/admin-api/login', async (req, res) => {
+    const {username, password} = req.body;
+    const isValid = await isValidCredentials(username, password)
+    if (isValid) {
+        const payload = {username};
+        const secretKey = '12edd250-ec16-4dbc-9b90-ef85faf7a519';
+        const token = jwt.sign(payload, secretKey, {expiresIn: '1h'});
+        res.json({token});
+    } else {
+        res.status(401).json({error: 'Invalid login credentials'});
+    }
+});
+
+app.post('/admin-api/create-admin', verifyToken, async (req, res) => {
+    const {username, password} = req.body;
+    const isValid = await isUsernameUnique(username);
+    if (username && password && isValid) {
+        await Admin.collection.insertOne({username, password});
+        res.json({message: 'Administrator created successfully', username, password});
+    } else {
+        res.json({message: 'Administrator was not created'});
+    }
+});
+
+app.post('/api/verify-token', verifyToken, (req, res) => {
+    res.json({message: "Token is valid"});
+});
 
 app.listen(4000, () => {
     console.log('Running on http://localhost:4000');

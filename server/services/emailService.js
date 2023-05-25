@@ -15,11 +15,16 @@ const mailOptions = (email) => {
     return {
         from: config.emailProviderLogin,
         to: email,
-        subject: 'Спасибо за участие в опросе!',
+        subject: 'Коммунарка',
         html: `
         <h1>Спасибо за участие в опросе!</h1>
-        <p>Предъявите Купон в любом фирменном магазине Коммунарка и получите скидку 5% на покупку!</p>
-        <img src="https://drive.google.com/uc?export=view&id=1Mostd3saZBR6ag6AvotlNUVYvlx074sB" alt="coupon"/>
+        <h3 style="font-weight: normal;"><p>
+        Компания "Коммунарка" и вся ее команда хотели бы выразить искреннюю благодарность каждому из вас за то, что уделили время и участвовали в нашей опросе. Ваше участие имеет огромное значение для нас, и мы ценим ваше внимание и отзывчивость.
+        </h3></p>
+        <p><h3><b>
+        Мы дарим Вам скидку в 5% на любую покупку в нашем фирменном магазине. Просто покажите письмо на кассе и наслаждайтесь любимым вкусом!
+        </b></h3></p>
+        <img src="https://drive.google.com/uc?export=view&id=1Oe0HofGkHOcav_WOpgG44DI2VO_zNw3l" width="512" alt="coupon"/>
         `
     };
 };

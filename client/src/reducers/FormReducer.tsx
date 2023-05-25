@@ -21,10 +21,6 @@ export const formReducer = (
 ) => {
     switch (action.type) {
         case 'GET_QUESTIONS':
-            console.log({
-                ...state,
-                questionForm: action.payload.questions,
-            });
             return {
                 ...state,
                 questionForm: action.payload.questions,
